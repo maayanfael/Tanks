@@ -6,29 +6,9 @@ namespace Complete
 {
     public class FireRocket : AbsFire
     {
-        public AudioSource m_ShootingAudio;
-        public AudioClip m_FireClip;
-        public LayerMask m_TanksLayer;
 
-        // Start is called before the first frame update
-        void Start()
+        public override void Shoot(Transform transform, float force, Vector3 forward, Rigidbody Shell, Rigidbody shootingTank)
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-        public override void Test(string a)
-        {
-            Debug.Log("rocket!" + a);
-        }
-
-        public override void Shoot(Transform transform, Vector3 velocity, Rigidbody Shell, Rigidbody shootingTank)
-        {
-            
 
             var allTanks = new List<GameObject>();
             FindGameObjectsWithName(allTanks, shootingTank.name);
@@ -37,28 +17,19 @@ namespace Complete
             {
                 if(allTanks[i].transform != shootingTank.transform)
                 {
-                    Vector3 direction = (allTanks[i].transform.position - shootingTank.transform.position).normalized;
-                    //Quaternion rotation = Quaternion.FromToRotation(shootingTank.transform.forward, direction);
 
-                    
-                    // Create an instance of the shell and store a reference to it's rigidbody.
                     Rigidbody shellInstance =
                         Instantiate(Shell, transform.position, transform.rotation) as Rigidbody;
+
+                    Vector3 direction = (allTanks[i].transform.position - transform.position).normalized;
+
                     shellInstance.AddForce(direction * 1000);
-
-                    //shellInstance.transform.LookAt(allTanks[i].transform);
-                    shellInstance.transform.position = Vector3.Lerp(transform.position, allTanks[i].transform.position, Time.deltaTime);
-
-                    shellInstance.velocity = velocity;
-                    //Instantiate(Shell, transform.position, transform.rotation) as Rigidbody;
+                    
+                    shellInstance.velocity = direction * force * 1.2f;
                                                         
 
                 }
             }
-            // Set the shell's velocity to the launch force in the fire position's forward direction.
-            
-
-
         }
 
         public void FindGameObjectsWithName(List<GameObject> goList, string name)

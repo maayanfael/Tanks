@@ -117,6 +117,7 @@ namespace Complete
         {
             // As soon as the round starts reset the tanks and make sure they can't move.
             ResetAllTanks ();
+            ResetAllShells();
             DisableTankControl ();
 
             // Snap the camera's zoom and position to something appropriate for the reset tanks.
@@ -260,6 +261,13 @@ namespace Complete
             for (int i = 0; i < m_Tanks.Length; i++)
             {
                 m_Tanks[i].Reset();
+            }
+        }
+        private void ResetAllShells()
+        {
+            for (int i = 0; i < m_Shells.Length; i++)
+            {
+                m_Shells[i].Reset();
             }
         }
 

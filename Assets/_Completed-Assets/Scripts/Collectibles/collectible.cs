@@ -6,13 +6,8 @@ namespace Complete
 {
     public class collectible : MonoBehaviour
     {
-        public LayerMask m_TankMask;                        // Used to filter what the explosion affects, this should be set to "Players".
         public Rigidbody m_RepresentedShell;
-        void Start()
-        {
-
-        }
-
+      
         // Update is called once per frame
         void Update()
         {
@@ -32,7 +27,7 @@ namespace Complete
                 if (otherColider.GetComponent<TankShooting>())
                 {
                     otherColider.GetComponent<TankShooting>().SetNewShell(m_RepresentedShell);
-                    Destroy(gameObject);
+                    gameObject.SetActive(false);
                 }
             }
 

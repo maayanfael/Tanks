@@ -87,7 +87,7 @@ namespace Complete
             m_Fired = true;
 
             Rigidbody shootingTank = GetComponent<Rigidbody>();
-            m_Shell.GetComponent<AbsFire>().Shoot(m_FireTransform, m_CurrentLaunchForce * m_FireTransform.forward, m_Shell, shootingTank);
+            m_Shell.GetComponent<AbsFire>().Shoot(m_FireTransform, m_CurrentLaunchForce, m_FireTransform.forward, m_Shell, shootingTank);
 
             // Reset the launch force.  This is a precaution in case of missing button events.
             m_CurrentLaunchForce = m_MinLaunchForce;
