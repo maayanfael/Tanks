@@ -14,8 +14,9 @@ namespace Complete
         public Text m_MessageText;                  // Reference to the overlay Text to display winning text, etc.
         public GameObject m_TankPrefab;             // Reference to the prefab the players will control.
         public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
+        public GameObject[] m_ShellPrefabs;
+        public ShellManager[] m_Shells;
 
-        
         private int m_RoundNumber;                  // Which round the game is currently on.
         private WaitForSeconds m_StartWait;         // Used to have a delay whilst the round starts.
         private WaitForSeconds m_EndWait;           // Used to have a delay whilst the round or game ends.
@@ -30,6 +31,7 @@ namespace Complete
             m_EndWait = new WaitForSeconds (m_EndDelay);
 
             SpawnAllTanks();
+            SpawnAllShells();
             SetCameraTargets();
 
             // Once the tanks have been created and the camera is using them as targets, start the game.
@@ -50,7 +52,23 @@ namespace Complete
             }
         }
 
+        private void SpawnAllShells()
+        {
+           
+            int rand = Random.Range(0, m_ShellPrefabs.Length);
 
+            // For all the tanks...
+            for (int i = 0; i < m_Shells.Length; i++)
+            {
+                rand = Random.Range(0, m_ShellPrefabs.Length);
+
+                
+                m_Shells[i].m_Instance =
+                    Instantiate(m_ShellPrefabs[rand], m_Shells[i].m_SpawnPoint.position, m_Shells[i].m_SpawnPoint.rotation) as GameObject;
+                
+                m_Shells[i].Setup();
+            }
+        }
         private void SetCameraTargets()
         {
             // Create a collection of transforms the same size as the number of tanks.

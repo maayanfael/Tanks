@@ -12,61 +12,63 @@ namespace Complete
         public float m_MaxLifeTime = 2f;                    // The time in seconds before the shell is removed.
         public float m_ExplosionRadius = 5f;                // The maximum distance away from the explosion tanks can be and are still affected.
 
-
         private void Start ()
         {
-            // If it isn't destroyed by then, destroy the shell after it's lifetime.
-            Destroy (gameObject, m_MaxLifeTime);
+                // If it isn't destroyed by then, destroy the shell after it's lifetime.
+                Destroy(gameObject, m_MaxLifeTime);
+
         }
 
 
         private void OnTriggerEnter (Collider other)
         {
-			// Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
-            Collider[] colliders = Physics.OverlapSphere (transform.position, m_ExplosionRadius, m_TankMask);
 
-            // Go through all the colliders...
-            for (int i = 0; i < colliders.Length; i++)
-            {
-                // ... and find their rigidbody.
-                Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody> ();
+                // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
+                Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_TankMask);
 
-                // If they don't have a rigidbody, go on to the next collider.
-                if (!targetRigidbody)
-                    continue;
+                // Go through all the colliders...
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    // ... and find their rigidbody.
+                    Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody>();
 
-                // Add an explosion force.
-                targetRigidbody.AddExplosionForce (m_ExplosionForce, transform.position, m_ExplosionRadius);
+                    // If they don't have a rigidbody, go on to the next collider.
+                    if (!targetRigidbody)
+                        continue;
 
-                // Find the TankHealth script associated with the rigidbody.
-                TankHealth targetHealth = targetRigidbody.GetComponent<TankHealth> ();
+                    // Add an explosion force.
+                    targetRigidbody.AddExplosionForce(m_ExplosionForce, transform.position, m_ExplosionRadius);
 
-                // If there is no TankHealth script attached to the gameobject, go on to the next collider.
-                if (!targetHealth)
-                    continue;
+                    // Find the TankHealth script associated with the rigidbody.
+                    TankHealth targetHealth = targetRigidbody.GetComponent<TankHealth>();
 
-                // Calculate the amount of damage the target should take based on it's distance from the shell.
-                float damage = CalculateDamage (targetRigidbody.position);
+                    // If there is no TankHealth script attached to the gameobject, go on to the next collider.
+                    if (!targetHealth)
+                        continue;
 
-                // Deal this damage to the tank.
-                targetHealth.TakeDamage (damage);
-            }
+                    // Calculate the amount of damage the target should take based on it's distance from the shell.
+                    float damage = CalculateDamage(targetRigidbody.position);
 
-            // Unparent the particles from the shell.
-            m_ExplosionParticles.transform.parent = null;
+                    // Deal this damage to the tank.
+                    targetHealth.TakeDamage(damage);
+                }
 
-            // Play the particle system.
-            m_ExplosionParticles.Play();
+                // Unparent the particles from the shell.
+                m_ExplosionParticles.transform.parent = null;
 
-            // Play the explosion sound effect.
-            m_ExplosionAudio.Play();
+                // Play the particle system.
+                m_ExplosionParticles.Play();
 
-            // Once the particles have finished, destroy the gameobject they are on.
-            ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
-            Destroy (m_ExplosionParticles.gameObject, mainModule.duration);
+                // Play the explosion sound effect.
+                m_ExplosionAudio.Play();
 
-            // Destroy the shell.
-            Destroy (gameObject);
+                // Once the particles have finished, destroy the gameobject they are on.
+                ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
+                Destroy(m_ExplosionParticles.gameObject, mainModule.duration);
+
+                // Destroy the shell.
+                Destroy(gameObject);
+ 
         }
 
 
