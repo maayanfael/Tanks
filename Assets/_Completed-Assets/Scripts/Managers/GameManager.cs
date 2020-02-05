@@ -38,7 +38,7 @@ namespace Complete
             StartCoroutine (GameLoop ());
         }
 
-
+         
         private void SpawnAllTanks()
         {
             // For all the tanks...
@@ -60,13 +60,13 @@ namespace Complete
             // For all the tanks...
             for (int i = 0; i < m_Shells.Length; i++)
             {
-                rand = Random.Range(0, m_ShellPrefabs.Length);
-
                 
                 m_Shells[i].m_Instance =
-                    Instantiate(m_ShellPrefabs[rand], m_Shells[i].m_SpawnPoint.position, m_Shells[i].m_SpawnPoint.rotation) as GameObject;
+                    Instantiate(m_ShellPrefabs[rand % m_ShellPrefabs.Length], m_Shells[i].m_SpawnPoint.position, m_Shells[i].m_SpawnPoint.rotation) as GameObject;
                 
                 m_Shells[i].Setup();
+
+                rand += Random.value > 0.7 ? 2 : 1;
             }
         }
         private void SetCameraTargets()
